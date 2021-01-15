@@ -19,6 +19,9 @@ def signUp():
     try:
         user = auth.create_user_with_email_and_password(email,password)
         print("New Account Created!")
+        ask = input("Do you want to Login now?[y/n]")
+        if ask == 'y':
+            login()
     except:
         print("Email already Exists")
 
@@ -26,8 +29,12 @@ def login():
     print("Logging In...")
     email = input("Enter Email: ")
     password =input("Enter Password: ")
-    login = auth.sign_in_with_email_and_password(email,password)
-    print("Successfully Logged In")
+    try:
+        login = auth.sign_in_with_email_and_password(email,password)
+        print("Successfully Logged In")
+        print(auth.get_account_info(login['idToken']))
+    except:
+        print("wrong password")
 
 ans=input("Are you a new user[y/n]")
 if ans =='y':
