@@ -22,10 +22,10 @@ def signUp():
     print("Signing Up...")
     email = input("Enter Email: ")
     password = getpass("Enter Password: ")
-    user = auth.create_user_with_email_and_password(email,password)
-    auth.send_email_verification(user['idToken'])
-    print('email verification link send')
     try:
+        user = auth.create_user_with_email_and_password(email,password)
+        auth.send_email_verification(user['idToken'])
+        print('email verification link send')
         print("New Account Created!")
         ask = input("Do you want to Login now?[y/n]")
         if ask == 'y':
@@ -43,18 +43,23 @@ def login():
     try:
         login = auth.sign_in_with_email_and_password(email,password)
         print("Successfully Logged In")
-        print(auth.get_account_info(login['idToken']))
+        userInfo = auth.get_account_info(login['idToken'])
+        user = userInfo['users']
+        userId = []
+        for value in user:
+            userId.append(value['localId'])
+        print(userId)
     except:
-        print("Invalid password")
+        print("Invalid Password")
         ask = input("do you want to reset password?[y/n]")
         if ask == 'y':
             auth.send_password_reset_email(email)
             print('Reset password link send')
-        
-      
-
+    
+    
+    
 ans=input("Are you a new user[y/n]")
 if ans =='y':
-      signUp()
+    signUp()
 elif ans =='n':
     login()
