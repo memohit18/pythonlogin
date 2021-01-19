@@ -1,5 +1,12 @@
 import pyrebase
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
 from getpass import getpass
+
+cred = credentials.Certificate(r'C:\Users\mohit\pythonlogin\authpython-b780b-firebase-adminsdk-afy6c-42b9599723.json')
+
+firebase_admin.initialize_app(cred)
 
 firebaseConfig = {'apiKey': "AIzaSyBgXyDzMyO2EG3n1FhUDp9m9uacnnHlf6Y",
     'authDomain': "authpython-b780b.firebaseapp.com",
@@ -11,12 +18,9 @@ firebaseConfig = {'apiKey': "AIzaSyBgXyDzMyO2EG3n1FhUDp9m9uacnnHlf6Y",
     'measurementId': "G-3PRDVNJYRP"}
 
 firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
 
-def __init__(self,api_key):
-    self.api_key = api_key
-    self.current_user = None
-    self.credentials = credentials
+
+
 
 def signUp():
     print("Signing Up...")
@@ -35,8 +39,21 @@ def signUp():
         ask = input("Log in?[y/n]")
         if ask == 'y':
             login()
+            
 
+        
+def signupUsingId():
+    email = input("Enter Email: ")
+    id = input("Enter username: ")
+    password = getpass("Enter Password: ")
+    user = auth.create_user(uid = id, email = email, password = password)
+    print("successfully created user :{0} ".format(user.uid))
+    auth.generate_password_reset_link(email, action_code_settings)
+    print('Email verification link send')
+        
+    
 def login():
+    auth = firebase.auth()
     print("Logging In...")
     email = input("Enter Email: ")
     password =getpass("Enter Password: ")
@@ -49,17 +66,17 @@ def login():
         for value in user:
             userId.append(value['localId'])
         print(userId)
+    
     except:
         print("Invalid Password")
         ask = input("do you want to reset password?[y/n]")
         if ask == 'y':
             auth.send_password_reset_email(email)
             print('Reset password link send')
-    
-    
+   
     
 ans=input("Are you a new user[y/n]")
 if ans =='y':
-    signUp()
+    signupUsingId()
 elif ans =='n':
     login()
